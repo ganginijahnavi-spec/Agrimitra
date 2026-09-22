@@ -6,6 +6,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { createClient } from "@/lib/supabase/server";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -43,6 +44,11 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
 
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <html
       lang={locale}
@@ -50,7 +56,7 @@ export default async function LocaleLayout({
     >
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>
-          <Navbar />
+          <Navbar user={user ? { email: user.email ?? "" } : null} />
           <main className="flex-1">{children}</main>
           <Footer />
         </NextIntlClientProvider>

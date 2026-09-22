@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, Sprout } from "lucide-react";
+import { LogOut, Menu, Sprout, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { signOutAction } from "@/lib/actions/auth";
 
-export function Navbar() {
+export function Navbar({ user }: { user: { email: string } | null }) {
   const t = useTranslations("Nav");
   const [open, setOpen] = useState(false);
 
@@ -24,10 +25,27 @@ export function Navbar() {
 
         <nav className="hidden items-center gap-2 md:flex">
           <LanguageSwitcher />
-          <Button variant="ghost" render={<Link href="/login" />}>
-            {t("login")}
-          </Button>
-          <Button render={<Link href="/register" />}>{t("register")}</Button>
+          {user ? (
+            <>
+              <Button variant="ghost" render={<Link href="/profile" />}>
+                <UserRound className="size-4" aria-hidden="true" />
+                {t("profile")}
+              </Button>
+              <form action={signOutAction}>
+                <Button type="submit" variant="outline">
+                  <LogOut className="size-4" aria-hidden="true" />
+                  {t("logout")}
+                </Button>
+              </form>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" render={<Link href="/login" />}>
+                {t("login")}
+              </Button>
+              <Button render={<Link href="/register" />}>{t("register")}</Button>
+            </>
+          )}
         </nav>
 
         <div className="flex items-center gap-2 md:hidden">
@@ -61,23 +79,47 @@ export function Navbar() {
                 >
                   {t("home")}
                 </SheetClose>
-                <SheetClose
-                  render={
-                    <Link
-                      href="/login"
-                      className="rounded-md px-3 py-3 text-base font-medium hover:bg-accent/40"
-                    />
-                  }
-                >
-                  {t("login")}
-                </SheetClose>
-                <SheetClose
-                  render={
-                    <Button size="lg" className="mt-2" render={<Link href="/register" />} />
-                  }
-                >
-                  {t("register")}
-                </SheetClose>
+
+                {user ? (
+                  <>
+                    <SheetClose
+                      render={
+                        <Link
+                          href="/profile"
+                          className="rounded-md px-3 py-3 text-base font-medium hover:bg-accent/40"
+                        />
+                      }
+                    >
+                      {t("profile")}
+                    </SheetClose>
+                    <form action={signOutAction}>
+                      <Button type="submit" variant="outline" size="lg" className="mt-2 w-full">
+                        <LogOut className="size-4" aria-hidden="true" />
+                        {t("logout")}
+                      </Button>
+                    </form>
+                  </>
+                ) : (
+                  <>
+                    <SheetClose
+                      render={
+                        <Link
+                          href="/login"
+                          className="rounded-md px-3 py-3 text-base font-medium hover:bg-accent/40"
+                        />
+                      }
+                    >
+                      {t("login")}
+                    </SheetClose>
+                    <SheetClose
+                      render={
+                        <Button size="lg" className="mt-2" render={<Link href="/register" />} />
+                      }
+                    >
+                      {t("register")}
+                    </SheetClose>
+                  </>
+                )}
               </nav>
             </SheetContent>
           </Sheet>

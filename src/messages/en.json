@@ -4,6 +4,8 @@
     "login": "Log in",
     "register": "Sign up",
     "dashboard": "Dashboard",
+    "profile": "Profile",
+    "logout": "Log out",
     "menu": "Menu",
     "closeMenu": "Close menu"
   },
@@ -74,5 +76,72 @@
   "LanguageSwitcher": {
     "en": "English",
     "te": "తెలుగు"
+  },
+  "Auth": {
+    "login": {
+      "title": "Log in",
+      "subtitle": "Welcome back to AgriMitra AI.",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Log in",
+      "submitting": "Logging in…",
+      "googleCta": "Continue with Google",
+      "orDivider": "or",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Sign up"
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Join AgriMitra AI for free.",
+      "fullName": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "At least 6 characters.",
+      "submit": "Sign up",
+      "submitting": "Creating account…",
+      "googleCta": "Continue with Google",
+      "orDivider": "or",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Log in",
+      "checkEmailTitle": "Check your email",
+      "checkEmailDescription": "We've sent a confirmation link to {email}. Click it to activate your account."
+    },
+    "errors": {
+      "invalidCredentials": "Incorrect email or password.",
+      "emailNotConfirmed": "Please confirm your email before logging in.",
+      "emailInUse": "An account with this email already exists.",
+      "weakPassword": "Password should be at least 6 characters.",
+      "missingFields": "Please fill in all required fields.",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "Profile": {
+    "title": "Your profile",
+    "subtitle": "Keep your details up to date so advice fits your farm.",
+    "fullName": "Full name",
+    "phone": "Phone (optional)",
+    "phonePlaceholder": "10-digit mobile number",
+    "location": "Location",
+    "locationSearchLabel": "Search your village or town",
+    "locationSearchPlaceholder": "Start typing a village or town name…",
+    "locationSearchHelp": "Search and select to set your location for weather and market data.",
+    "locationSearching": "Searching…",
+    "locationNoResults": "No places found. Try a different spelling.",
+    "village": "Village/Town",
+    "district": "District",
+    "state": "State",
+    "farmSize": "Farm size in acres (optional)",
+    "preferredLanguage": "Preferred language",
+    "save": "Save changes",
+    "saving": "Saving…",
+    "saved": "Profile updated.",
+    "signedInAs": "Signed in as {email}",
+    "logout": "Log out",
+    "noLocationSet": "No location set yet — search above.",
+    "locationSet": "Location set.",
+    "errors": {
+      "unauthorized": "Your session expired. Please log in again.",
+      "generic": "Couldn't save your changes. Please try again."
+    }
   }
 }
