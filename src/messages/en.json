@@ -1,0 +1,78 @@
+{
+  "Nav": {
+    "home": "Home",
+    "login": "Log in",
+    "register": "Sign up",
+    "dashboard": "Dashboard",
+    "menu": "Menu",
+    "closeMenu": "Close menu"
+  },
+  "Footer": {
+    "tagline": "AI-powered guidance for every farmer, in your own language.",
+    "quickLinks": "Quick links",
+    "home": "Home",
+    "login": "Log in",
+    "register": "Sign up",
+    "language": "Language",
+    "rights": "All rights reserved.",
+    "disclaimer": "AgriMitra AI gives general, decision-support guidance and is not a replacement for a qualified agricultural expert."
+  },
+  "Home": {
+    "hero": {
+      "eyebrow": "Your farming companion",
+      "title": "Smarter farming decisions, in Telugu or English",
+      "subtitle": "Ask crop questions, check the weather, track mandi prices and spot crop issues from a photo — all in one simple app built for Indian farmers.",
+      "cta": "Ask AgriMitra AI",
+      "secondaryCta": "Create free account"
+    },
+    "features": {
+      "title": "Everything a farmer needs, in one place",
+      "subtitle": "Built for real farms, real questions and real weather.",
+      "chatbot": {
+        "title": "AI Chatbot",
+        "description": "Ask farming questions in plain Telugu or English and get clear, practical answers any time of day."
+      },
+      "analysis": {
+        "title": "Crop Analysis",
+        "description": "Upload a photo of a leaf or plant and get a possible-issue report with suggested next steps."
+      },
+      "weather": {
+        "title": "Weather Intelligence",
+        "description": "Live forecasts for your exact village, with simple farming hints like when to avoid spraying."
+      },
+      "market": {
+        "title": "Market Prices",
+        "description": "Real mandi prices from data.gov.in for your state and district — no guesswork, no stale numbers."
+      },
+      "voice": {
+        "title": "Telugu + Voice",
+        "description": "Speak your question in Telugu or English and hear the answer read back to you."
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "subtitle": "Get started in a few minutes.",
+      "step1": { "title": "Create your account", "description": "Sign up free with your email and set your village or town." },
+      "step2": { "title": "Add your crops", "description": "Tell AgriMitra AI what you're growing so advice fits your farm." },
+      "step3": { "title": "Ask, check, upload", "description": "Chat with the AI, check weather and prices, or upload a crop photo." },
+      "step4": { "title": "Get clear guidance", "description": "Receive simple, practical answers in your own language." }
+    },
+    "cta": {
+      "title": "Ready to farm smarter?",
+      "subtitle": "Join AgriMitra AI free and get guidance built for your crops and your location.",
+      "button": "Get started for free"
+    }
+  },
+  "States": {
+    "loading": "Loading…",
+    "emptyDefaultTitle": "Nothing here yet",
+    "emptyDefaultDescription": "There's nothing to show right now.",
+    "errorDefaultTitle": "Something went wrong",
+    "errorDefaultDescription": "We couldn't load this right now. Please try again.",
+    "retry": "Retry"
+  },
+  "LanguageSwitcher": {
+    "en": "English",
+    "te": "తెలుగు"
+  }
+}
