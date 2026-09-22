@@ -2,6 +2,8 @@ import { Camera, CloudSun, MessageCircle, Plus, Sprout, TrendingUp } from "lucid
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { redirect, Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getWeather } from "@/lib/weather";
+import { WeatherIcon } from "@/components/weather/weather-icon";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CropCard } from "@/components/crops/crop-card";
@@ -23,6 +25,7 @@ export default async function DashboardPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("Dashboard");
+  const tWeather = await getTranslations("Weather");
 
   const supabase = await createClient();
   const {
@@ -34,7 +37,11 @@ export default async function DashboardPage({
   }
 
   const [{ data: profile }, { data: crops, count }] = await Promise.all([
-    supabase.from("profiles").select("full_name, village, district, state").eq("id", user.id).single(),
+    supabase
+      .from("profiles")
+      .select("full_name, village, district, state, latitude, longitude")
+      .eq("id", user.id)
+      .single(),
     supabase
       .from("crops")
       .select("id, crop_name, variety, area_acres, sowing_date", { count: "exact" })
@@ -45,6 +52,11 @@ export default async function DashboardPage({
 
   const totalCrops = count ?? 0;
   const location = [profile?.village, profile?.district, profile?.state].filter(Boolean).join(", ");
+
+  const weather =
+    profile?.latitude != null && profile?.longitude != null
+      ? await getWeather(profile.latitude, profile.longitude).catch(() => null)
+      : null;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
@@ -129,8 +141,27 @@ export default async function DashboardPage({
                 <CloudSun className="size-4 text-primary" aria-hidden="true" />
                 {t("weather")}
               </CardTitle>
-              <CardDescription>{t("weatherComingSoon")}</CardDescription>
+              {weather ? (
+                <CardDescription className="flex items-center gap-2 text-foreground">
+                  <WeatherIcon code={weather.current.weatherCode} className="size-5 text-primary" />
+                  <span className="text-lg font-semibold">
+                    {Math.round(weather.current.temperature)}°C
+                  </span>
+                  <span className="text-muted-foreground">
+                    {tWeather(`conditions.${weather.current.weatherCode}`)}
+                  </span>
+                </CardDescription>
+              ) : (
+                <CardDescription>
+                  {profile?.latitude != null ? t("weatherUnavailable") : t("weatherNoLocation")}
+                </CardDescription>
+              )}
             </CardHeader>
+            <CardContent>
+              <Link href="/weather" className="text-sm text-primary hover:underline">
+                {t("viewForecast")}
+              </Link>
+            </CardContent>
           </Card>
 
           <Card className="border-none shadow-sm">
