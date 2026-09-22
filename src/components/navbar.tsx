@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LogOut, Menu, Sprout, UserRound } from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, Sprout, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,10 @@ export function Navbar({ user }: { user: { email: string } | null }) {
           <LanguageSwitcher />
           {user ? (
             <>
+              <Button variant="ghost" render={<Link href="/dashboard" />}>
+                <LayoutDashboard className="size-4" aria-hidden="true" />
+                {t("dashboard")}
+              </Button>
               <Button variant="ghost" render={<Link href="/profile" />}>
                 <UserRound className="size-4" aria-hidden="true" />
                 {t("profile")}
@@ -82,6 +86,16 @@ export function Navbar({ user }: { user: { email: string } | null }) {
 
                 {user ? (
                   <>
+                    <SheetClose
+                      render={
+                        <Link
+                          href="/dashboard"
+                          className="rounded-md px-3 py-3 text-base font-medium hover:bg-accent/40"
+                        />
+                      }
+                    >
+                      {t("dashboard")}
+                    </SheetClose>
                     <SheetClose
                       render={
                         <Link

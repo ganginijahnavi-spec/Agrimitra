@@ -7,7 +7,7 @@ function isValidLocale(value: string | null): value is (typeof routing.locales)[
 }
 
 // Handles the Supabase OAuth (Google) redirect: exchanges the auth code for
-// a session, then sends the farmer on to their profile.
+// a session, then sends the farmer on to their dashboard.
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}/${locale}/profile`);
+      return NextResponse.redirect(`${origin}/${locale}/dashboard`);
     }
   }
 

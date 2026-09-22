@@ -47,7 +47,7 @@ export async function signUpAction(
     return { status: "success", email };
   }
 
-  return redirect({ href: "/profile", locale });
+  return redirect({ href: "/dashboard", locale });
 }
 
 export async function signInAction(
@@ -69,7 +69,7 @@ export async function signInAction(
     return { status: "error", errorKey: mapAuthErrorToKey(error.message) };
   }
 
-  return redirect({ href: "/profile", locale });
+  return redirect({ href: "/dashboard", locale });
 }
 
 export async function signInWithGoogleAction() {

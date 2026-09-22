@@ -143,5 +143,76 @@
       "unauthorized": "Your session expired. Please log in again.",
       "generic": "Couldn't save your changes. Please try again."
     }
+  },
+  "Crops": {
+    "title": "My Crops",
+    "subtitle": "Manage the crops you're growing.",
+    "addCrop": "Add crop",
+    "backToCrops": "Back to crops",
+    "newTitle": "Add a crop",
+    "editTitle": "Edit crop",
+    "empty": {
+      "title": "No crops yet",
+      "description": "Add your first crop to start tracking it."
+    },
+    "card": {
+      "areaAcres": "{area} acres",
+      "sowed": "Sowed {date}",
+      "viewDetails": "View details"
+    },
+    "form": {
+      "cropName": "Crop name",
+      "variety": "Variety",
+      "areaAcres": "Area (acres)",
+      "soilType": "Soil type",
+      "sowingDate": "Sowing date",
+      "expectedHarvestDate": "Expected harvest date",
+      "irrigationType": "Irrigation type",
+      "notes": "Notes",
+      "optional": "optional",
+      "create": "Add crop",
+      "creating": "Adding…",
+      "update": "Save changes",
+      "updating": "Saving…",
+      "errors": {
+        "unauthorized": "Your session expired. Please log in again.",
+        "generic": "Couldn't save this crop. Please try again."
+      }
+    },
+    "detail": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteConfirmTitle": "Delete this crop?",
+      "deleteConfirmDescription": "This will permanently remove \"{name}\" and cannot be undone.",
+      "cancel": "Cancel",
+      "confirmDelete": "Delete",
+      "variety": "Variety",
+      "area": "Area",
+      "soilType": "Soil type",
+      "sowingDate": "Sowing date",
+      "expectedHarvestDate": "Expected harvest",
+      "irrigationType": "Irrigation",
+      "notes": "Notes",
+      "notSet": "Not set"
+    }
+  },
+  "Dashboard": {
+    "welcomeName": "Welcome back, {name}",
+    "welcome": "Welcome back",
+    "subtitle": "Here's what's happening with your farm.",
+    "totalCrops": "Total crops",
+    "recentCrops": "Recent crops",
+    "viewAllCrops": "View all crops",
+    "quickActions": "Quick actions",
+    "askAI": "Ask AI",
+    "addCrop": "Add crop",
+    "weather": "Weather",
+    "market": "Market",
+    "analyzeCrop": "Analyze crop",
+    "comingSoon": "Coming soon",
+    "weatherComingSoon": "Weather forecasts are coming in a future phase.",
+    "marketComingSoon": "Market prices are coming in a future phase.",
+    "chatComingSoon": "The AI chatbot is coming in a future phase.",
+    "noCropsYet": "You haven't added any crops yet."
   }
 }

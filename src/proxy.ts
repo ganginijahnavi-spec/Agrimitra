@@ -34,7 +34,7 @@ export default async function proxy(request: NextRequest) {
 
   if (user && isAuthPage) {
     const url = request.nextUrl.clone();
-    url.pathname = `/${locale}/profile`;
+    url.pathname = `/${locale}/dashboard`;
     return NextResponse.redirect(url);
   }
 
