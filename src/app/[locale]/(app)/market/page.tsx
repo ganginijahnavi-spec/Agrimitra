@@ -60,11 +60,7 @@ export default async function MarketPage({
 
   if (state) {
     const { data, error } = await callEdgeFunction<MarketPricesResponse>("market-prices", {
-      state,
-      district,
-      market,
-      commodity,
-      sort,
+      searchParams: { state, district, market, commodity, sort },
     });
     if (error) fetchError = true;
     else result = data;

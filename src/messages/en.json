@@ -217,7 +217,10 @@
     "marketNoLocation": "Set your state to see market prices.",
     "marketNoData": "No recent prices found for your crops yet.",
     "viewPrices": "View prices",
-    "chatComingSoon": "The AI chatbot is coming in a future phase.",
+    "recentConversations": "Recent conversations",
+    "viewAllChats": "View all chats",
+    "noChatsYet": "No conversations yet.",
+    "startChat": "Start chatting",
     "noCropsYet": "You haven't added any crops yet."
   },
   "Weather": {
@@ -304,5 +307,33 @@
     "trendTitle": "Price trend",
     "trendSubtitle": "{commodity} at {market}",
     "trendUnavailable": "Not enough price history yet for a trend — check back after a few days."
+  },
+  "Chat": {
+    "title": "Chat",
+    "newChat": "New chat",
+    "history": "History",
+    "noChatsYet": "No conversations yet.",
+    "untitledChat": "New conversation",
+    "emptyTitle": "Ask AgriMitra AI anything",
+    "emptySubtitle": "Get farming advice in your own language, anytime.",
+    "examplePrompts": {
+      "1": "Why are my tomato leaves turning yellow?",
+      "2": "When is the best time to sow paddy this season?",
+      "3": "How can I improve soil health naturally?",
+      "4": "What does today's weather mean for my crops?",
+      "5": "How do I know if my crop is ready to harvest?"
+    },
+    "inputPlaceholder": "Ask a farming question…",
+    "inputLabel": "Message",
+    "send": "Send",
+    "thinking": "AgriMitra AI is typing…",
+    "retry": "Retry",
+    "disclaimer": "AgriMitra AI gives general guidance and can make mistakes. For serious problems, consult a local expert.",
+    "errors": {
+      "unauthorized": "Your session expired. Please log in again.",
+      "rateLimited": "You've reached today's question limit. Please try again tomorrow.",
+      "unavailable": "The AI assistant is temporarily unavailable. Please try again.",
+      "generic": "Something went wrong. Please try again."
+    }
   }
 }

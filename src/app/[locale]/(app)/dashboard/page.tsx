@@ -39,7 +39,7 @@ export default async function DashboardPage({
     return redirect({ href: "/login", locale });
   }
 
-  const [{ data: profile }, { data: crops, count }] = await Promise.all([
+  const [{ data: profile }, { data: crops, count }, { data: chats }] = await Promise.all([
     supabase
       .from("profiles")
       .select("full_name, village, district, state, latitude, longitude")
@@ -50,6 +50,12 @@ export default async function DashboardPage({
       .select("id, crop_name, variety, area_acres, sowing_date", { count: "exact" })
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
+      .limit(3),
+    supabase
+      .from("chats")
+      .select("id, title, updated_at")
+      .eq("user_id", user.id)
+      .order("updated_at", { ascending: false })
       .limit(3),
   ]);
 
@@ -65,8 +71,7 @@ export default async function DashboardPage({
   const marketResult =
     profile?.state && marketCropName
       ? await callEdgeFunction<MarketPricesResponse>("market-prices", {
-          state: profile.state,
-          commodity: marketCropName,
+          searchParams: { state: profile.state, commodity: marketCropName },
         }).then((r) => r.data)
       : null;
   const marketPrice = marketResult?.prices?.[0] ?? null;
@@ -210,10 +215,29 @@ export default async function DashboardPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <MessageCircle className="size-4 text-primary" aria-hidden="true" />
-                {t("askAI")}
+                {t("recentConversations")}
               </CardTitle>
-              <CardDescription>{t("chatComingSoon")}</CardDescription>
+              {!chats || chats.length === 0 ? (
+                <CardDescription>{t("noChatsYet")}</CardDescription>
+              ) : (
+                <CardDescription>
+                  <ul className="space-y-1">
+                    {chats.map((chat) => (
+                      <li key={chat.id} className="truncate">
+                        <Link href={`/chat/${chat.id}`} className="text-foreground hover:text-primary">
+                          {chat.title || t("startChat")}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </CardDescription>
+              )}
             </CardHeader>
+            <CardContent>
+              <Link href="/chat" className="text-sm text-primary hover:underline">
+                {chats && chats.length > 0 ? t("viewAllChats") : t("startChat")}
+              </Link>
+            </CardContent>
           </Card>
         </div>
       </div>
