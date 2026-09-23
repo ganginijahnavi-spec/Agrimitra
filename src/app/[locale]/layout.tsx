@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
@@ -6,6 +6,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { createClient } from "@/lib/supabase/server";
 import "../globals.css";
 
@@ -23,6 +24,18 @@ export const metadata: Metadata = {
   title: "AgriMitra AI",
   description:
     "A multilingual AI assistant for crop analysis, weather intelligence and market insights, built for Indian farmers.",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#1a6323",
 };
 
 export function generateStaticParams() {
@@ -56,6 +69,7 @@ export default async function LocaleLayout({
     >
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>
+          <ServiceWorkerRegister />
           <Navbar user={user ? { email: user.email ?? "" } : null} />
           <main className="flex-1">{children}</main>
           <Footer />
