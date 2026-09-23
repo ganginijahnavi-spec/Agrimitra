@@ -2,11 +2,14 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
-import { AlertCircle, Send } from "lucide-react";
+import { AlertCircle, Loader2, Mic, Send, Square, Volume2, VolumeX } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { sendChatMessageAction } from "@/lib/actions/chat";
 import type { ChatMessage } from "@/lib/chat";
+import { useVoiceInput } from "@/hooks/use-voice-input";
+import { useTextToSpeech } from "@/hooks/use-text-to-speech";
+import { stripMarkdown } from "@/lib/markdown";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { MessageContent } from "./message-content";
@@ -32,10 +35,26 @@ export function ChatWindow({
   const [lastFailedMessage, setLastFailedMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const voice = useVoiceInput(language);
+  const tts = useTextToSpeech(language);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isPending]);
+
+  function handleMicClick() {
+    if (voice.status === "recording") {
+      voice.stop();
+      return;
+    }
+    if (voice.status !== "idle") return;
+
+    voice.start((text) => {
+      setInput((prev) => (prev.trim() ? `${prev.trim()} ${text}` : text));
+      inputRef.current?.focus();
+    });
+  }
 
   function submit(text: string) {
     const trimmed = text.trim();
@@ -130,6 +149,24 @@ export function ChatWindow({
                   }`}
                 >
                   <MessageContent content={message.content} />
+                  {message.role === "assistant" && tts.supported && (
+                    <Button
+                      type="button"
+                      size="icon-xs"
+                      variant="ghost"
+                      className="-ml-1.5 mt-1"
+                      onClick={() => tts.speak(message.id, stripMarkdown(message.content))}
+                      aria-label={
+                        tts.speakingId === message.id ? t("stopSpeaking") : t("speak")
+                      }
+                    >
+                      {tts.speakingId === message.id ? (
+                        <VolumeX className="size-3.5" aria-hidden="true" />
+                      ) : (
+                        <Volume2 className="size-3.5" aria-hidden="true" />
+                      )}
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}
@@ -175,14 +212,40 @@ export function ChatWindow({
             {t("inputLabel")}
           </label>
           <textarea
+            ref={inputRef}
             id="chat-input"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={t("inputPlaceholder")}
+            placeholder={
+              voice.status === "recording"
+                ? t("recording")
+                : voice.status === "transcribing"
+                  ? t("transcribing")
+                  : t("inputPlaceholder")
+            }
+            disabled={voice.status === "transcribing"}
             rows={1}
-            className="max-h-32 flex-1 resize-none rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="max-h-32 flex-1 resize-none rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-60"
           />
+          {voice.isSupported && (
+            <Button
+              type="button"
+              size="icon"
+              variant={voice.status === "recording" ? "destructive" : "outline"}
+              disabled={voice.status === "transcribing"}
+              onClick={handleMicClick}
+              aria-label={voice.status === "recording" ? t("micStop") : t("micLabel")}
+            >
+              {voice.status === "transcribing" ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+              ) : voice.status === "recording" ? (
+                <Square className="size-4" aria-hidden="true" />
+              ) : (
+                <Mic className="size-4" aria-hidden="true" />
+              )}
+            </Button>
+          )}
           <Button
             type="submit"
             size="icon"
@@ -192,6 +255,11 @@ export function ChatWindow({
             <Send className="size-4" aria-hidden="true" />
           </Button>
         </div>
+        {voice.errorKey && (
+          <p className="mx-auto mt-2 max-w-2xl text-center text-xs text-destructive">
+            {t(`voiceErrors.${voice.errorKey}`)}
+          </p>
+        )}
         <p className="mx-auto mt-2 max-w-2xl text-center text-xs text-muted-foreground">
           {t("disclaimer")}
         </p>

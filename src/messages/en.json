@@ -329,11 +329,25 @@
     "thinking": "AgriMitra AI is typing…",
     "retry": "Retry",
     "disclaimer": "AgriMitra AI gives general guidance and can make mistakes. For serious problems, consult a local expert.",
+    "micLabel": "Record a voice message",
+    "micStop": "Stop recording",
+    "recording": "Listening…",
+    "transcribing": "Transcribing…",
+    "speak": "Listen to this reply",
+    "stopSpeaking": "Stop reading",
     "errors": {
       "unauthorized": "Your session expired. Please log in again.",
       "rateLimited": "You've reached today's question limit. Please try again tomorrow.",
       "unavailable": "The AI assistant is temporarily unavailable. Please try again.",
       "generic": "Something went wrong. Please try again."
+    },
+    "voiceErrors": {
+      "micDenied": "Microphone access was denied. Please allow microphone access and try again.",
+      "unauthorized": "Your session expired. Please log in again.",
+      "rateLimited": "You've reached today's voice limit. Please try again tomorrow, or type your question.",
+      "tooLarge": "That recording is too long. Please try a shorter message.",
+      "unavailable": "Voice transcription is temporarily unavailable. Please type your question.",
+      "generic": "Couldn't understand that. Please try again or type your question."
     }
   },
   "Analyze": {

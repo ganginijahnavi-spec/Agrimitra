@@ -138,3 +138,70 @@ export async function groqVisionAnalysis(
     clearTimeout(timeout);
   }
 }
+
+// Verified live against api.groq.com on 2026-09-23. whisper-large-v3-turbo
+// is OpenAI-compatible (multipart /audio/transcriptions), supports the same
+// ~99 Whisper languages (including Telugu, "te") via an optional
+// ISO-639-1 `language` hint, and is far cheaper/faster than
+// whisper-large-v3 with only a small accuracy tradeoff — a good fit for
+// short voice messages. Free-tier cap is 25MB per file.
+export async function groqTranscribe(
+  audioBytes: Uint8Array,
+  mimeType: string,
+  language: "en" | "te" | undefined,
+  options: { timeoutMs?: number } = {},
+): Promise<string> {
+  const apiKey = Deno.env.get("GROQ_API_KEY");
+  if (!apiKey) throw new GroqError("GROQ_API_KEY is not configured");
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), options.timeoutMs ?? DEFAULT_TIMEOUT_MS);
+
+  try {
+    const extension = mimeType.includes("wav")
+      ? "wav"
+      : mimeType.includes("ogg")
+        ? "ogg"
+        : mimeType.includes("mp4") || mimeType.includes("m4a")
+          ? "m4a"
+          : "webm";
+
+    const form = new FormData();
+    form.append("file", new Blob([audioBytes], { type: mimeType }), `audio.${extension}`);
+    form.append("model", "whisper-large-v3-turbo");
+    form.append("response_format", "json");
+    if (language) form.append("language", language);
+
+    const response = await fetch(`${GROQ_BASE_URL}/audio/transcriptions`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}` },
+      body: form,
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      throw new GroqError(
+        `Groq transcription request failed: ${response.status} ${body}`,
+        response.status,
+      );
+    }
+
+    const payload = await response.json();
+    const text = payload.text;
+
+    if (typeof text !== "string") {
+      throw new GroqError("Groq transcription returned no text");
+    }
+
+    return text.trim();
+  } catch (error) {
+    if (error instanceof GroqError) throw error;
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new GroqError("Groq transcription request timed out");
+    }
+    throw new GroqError(`Groq transcription request failed: ${String(error)}`);
+  } finally {
+    clearTimeout(timeout);
+  }
+}
