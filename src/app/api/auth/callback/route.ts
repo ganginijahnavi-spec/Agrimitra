@@ -16,9 +16,18 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}/${locale}/dashboard`);
+      // Land the farmer in whichever language they last set, even if it
+      // differs from the locale the OAuth flow started in.
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("preferred_language")
+        .eq("id", data.user.id)
+        .single();
+      const redirectLocale = profile?.preferred_language === "te" ? "te" : locale;
+
+      return NextResponse.redirect(`${origin}/${redirectLocale}/dashboard`);
     }
   }
 

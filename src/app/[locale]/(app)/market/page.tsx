@@ -180,15 +180,17 @@ export default async function MarketPage({
                   <div className="flex items-baseline justify-between">
                     <span className="text-sm text-muted-foreground">{t("modalPrice")}</span>
                     <span className="text-xl font-bold text-foreground">
-                      ₹{price.modal_price ?? "—"}
+                      ₹{price.modal_price != null ? format.number(price.modal_price) : "—"}
                     </span>
                   </div>
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>
-                      {t("minPrice")}: ₹{price.min_price ?? "—"}
+                      {t("minPrice")}: ₹
+                      {price.min_price != null ? format.number(price.min_price) : "—"}
                     </span>
                     <span>
-                      {t("maxPrice")}: ₹{price.max_price ?? "—"}
+                      {t("maxPrice")}: ₹
+                      {price.max_price != null ? format.number(price.max_price) : "—"}
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground">

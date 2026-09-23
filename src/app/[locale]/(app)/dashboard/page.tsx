@@ -1,5 +1,5 @@
 import { Camera, CloudSun, MessageCircle, Plus, Sprout, TrendingUp } from "lucide-react";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import { redirect, Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getWeather } from "@/lib/weather";
@@ -29,6 +29,7 @@ export default async function DashboardPage({
   const t = await getTranslations("Dashboard");
   const tWeather = await getTranslations("Weather");
   const tMarket = await getTranslations("Market");
+  const format = await getFormatter();
 
   const supabase = await createClient();
   const {
@@ -191,7 +192,9 @@ export default async function DashboardPage({
               {marketPrice ? (
                 <CardDescription className="text-foreground">
                   <span className="font-semibold">{marketPrice.commodity}</span>:{" "}
-                  <span className="font-semibold">₹{marketPrice.modal_price}</span>{" "}
+                  <span className="font-semibold">
+                    ₹{marketPrice.modal_price != null ? format.number(marketPrice.modal_price) : "—"}
+                  </span>{" "}
                   <span className="text-muted-foreground">{tMarket("unit")}</span>
                 </CardDescription>
               ) : (

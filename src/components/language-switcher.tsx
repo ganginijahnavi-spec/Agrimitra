@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { updatePreferredLanguageAction } from "@/lib/actions/language";
 
 export function LanguageSwitcher() {
   const t = useTranslations("LanguageSwitcher");
@@ -37,7 +38,10 @@ export function LanguageSwitcher() {
         {routing.locales.map((loc) => (
           <DropdownMenuItem
             key={loc}
-            onClick={() => router.replace(pathname, { locale: loc })}
+            onClick={() => {
+              router.replace(pathname, { locale: loc });
+              void updatePreferredLanguageAction(loc);
+            }}
             className={loc === locale ? "font-semibold text-primary" : undefined}
           >
             {t(loc)}

@@ -63,13 +63,22 @@ export async function signInAction(
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
     return { status: "error", errorKey: mapAuthErrorToKey(error.message) };
   }
 
-  return redirect({ href: "/dashboard", locale });
+  // Land the farmer in whichever language they last set, even if they
+  // happened to be browsing in the other one when they logged in.
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("preferred_language")
+    .eq("id", data.user.id)
+    .single();
+  const redirectLocale = profile?.preferred_language === "te" ? "te" : locale;
+
+  return redirect({ href: "/dashboard", locale: redirectLocale });
 }
 
 export async function signInWithGoogleAction() {
