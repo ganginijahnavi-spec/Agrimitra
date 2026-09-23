@@ -7,8 +7,10 @@ const intlMiddleware = createMiddleware(routing);
 
 // Everything else under a locale (dashboard, crops, weather, market, chat,
 // analyze, profile, ...) lives in the (app) route group and is protected.
-const AUTH_ONLY_PATHS = ["/login", "/register"];
-const PUBLIC_PATHS = ["/", ...AUTH_ONLY_PATHS];
+// Signed-in visitors hitting any of these are sent to their dashboard
+// instead — including "/", so the marketing home page never re-appears
+// after login.
+const PUBLIC_PATHS = ["/", "/login", "/register"];
 
 function stripLocale(pathname: string) {
   const locale = routing.locales.find(
@@ -23,16 +25,15 @@ export default async function proxy(request: NextRequest) {
   const user = await updateSession(request, intlResponse);
 
   const { locale, path } = stripLocale(request.nextUrl.pathname);
-  const isAuthPage = AUTH_ONLY_PATHS.includes(path);
-  const isProtected = !PUBLIC_PATHS.includes(path);
+  const isPublic = PUBLIC_PATHS.includes(path);
 
-  if (!user && isProtected) {
+  if (!user && !isPublic) {
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}/login`;
     return NextResponse.redirect(url);
   }
 
-  if (user && isAuthPage) {
+  if (user && isPublic) {
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}/dashboard`;
     return NextResponse.redirect(url);

@@ -47,11 +47,7 @@ export default async function HomePage({
             {t("hero.subtitle")}
           </p>
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-            <Button
-              size="lg"
-              className="h-12 px-8 text-base"
-              render={<Link href="/register" />}
-            >
+            <Button size="lg" className="h-12 px-8 text-base" render={<Link href="/chat" />}>
               {t("hero.cta")}
             </Button>
             <Button
