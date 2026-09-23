@@ -3,6 +3,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { redirect, Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getWeather } from "@/lib/weather";
+import { callEdgeFunction } from "@/lib/functions";
+import type { MarketPricesResponse } from "@/lib/market";
 import { WeatherIcon } from "@/components/weather/weather-icon";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,6 +28,7 @@ export default async function DashboardPage({
   setRequestLocale(locale);
   const t = await getTranslations("Dashboard");
   const tWeather = await getTranslations("Weather");
+  const tMarket = await getTranslations("Market");
 
   const supabase = await createClient();
   const {
@@ -57,6 +60,16 @@ export default async function DashboardPage({
     profile?.latitude != null && profile?.longitude != null
       ? await getWeather(profile.latitude, profile.longitude).catch(() => null)
       : null;
+
+  const marketCropName = crops?.[0]?.crop_name;
+  const marketResult =
+    profile?.state && marketCropName
+      ? await callEdgeFunction<MarketPricesResponse>("market-prices", {
+          state: profile.state,
+          commodity: marketCropName,
+        }).then((r) => r.data)
+      : null;
+  const marketPrice = marketResult?.prices?.[0] ?? null;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
@@ -170,8 +183,27 @@ export default async function DashboardPage({
                 <TrendingUp className="size-4 text-primary" aria-hidden="true" />
                 {t("market")}
               </CardTitle>
-              <CardDescription>{t("marketComingSoon")}</CardDescription>
+              {marketPrice ? (
+                <CardDescription className="text-foreground">
+                  <span className="font-semibold">{marketPrice.commodity}</span>:{" "}
+                  <span className="font-semibold">₹{marketPrice.modal_price}</span>{" "}
+                  <span className="text-muted-foreground">{tMarket("unit")}</span>
+                </CardDescription>
+              ) : (
+                <CardDescription>
+                  {!crops || crops.length === 0
+                    ? t("marketNoCrops")
+                    : !profile?.state
+                      ? t("marketNoLocation")
+                      : t("marketNoData")}
+                </CardDescription>
+              )}
             </CardHeader>
+            <CardContent>
+              <Link href="/market" className="text-sm text-primary hover:underline">
+                {t("viewPrices")}
+              </Link>
+            </CardContent>
           </Card>
 
           <Card className="border-none shadow-sm">
