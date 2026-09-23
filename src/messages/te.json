@@ -306,6 +306,7 @@
     "errorTitle": "మార్కెట్ ధరలను లోడ్ చేయలేకపోయాము",
     "trendTitle": "ధర ధోరణి",
     "trendSubtitle": "{market}లో {commodity}",
+    "trendSrSummary": "సాధారణ ధర ధోరణి {firstDate}న ₹{first} నుండి {lastDate}న ₹{last} వరకు.",
     "trendUnavailable": "ధోరణి చూపించడానికి ఇంకా తగినంత ధర చరిత్ర లేదు — కొన్ని రోజుల తర్వాత మళ్ళీ చూడండి."
   },
   "Chat": {

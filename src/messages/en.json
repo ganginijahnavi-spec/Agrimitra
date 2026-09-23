@@ -306,6 +306,7 @@
     "errorTitle": "Unable to load market prices",
     "trendTitle": "Price trend",
     "trendSubtitle": "{commodity} at {market}",
+    "trendSrSummary": "Modal price trend from ₹{first} on {firstDate} to ₹{last} on {lastDate}.",
     "trendUnavailable": "Not enough price history yet for a trend — check back after a few days."
   },
   "Chat": {

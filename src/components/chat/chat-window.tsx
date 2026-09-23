@@ -135,7 +135,11 @@ export function ChatWindow({
             </div>
           </div>
         ) : (
-          <div className="mx-auto flex max-w-2xl flex-col gap-4">
+          <div
+            className="mx-auto flex max-w-2xl flex-col gap-4"
+            role="log"
+            aria-live="polite"
+          >
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -256,7 +260,10 @@ export function ChatWindow({
           </Button>
         </div>
         {voice.errorKey && (
-          <p className="mx-auto mt-2 max-w-2xl text-center text-xs text-destructive">
+          <p
+            role="alert"
+            className="mx-auto mt-2 max-w-2xl text-center text-xs text-destructive"
+          >
             {t(`voiceErrors.${voice.errorKey}`)}
           </p>
         )}
