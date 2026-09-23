@@ -69,3 +69,72 @@ export async function groqChatCompletion(
     clearTimeout(timeout);
   }
 }
+
+// Verified live against api.groq.com on 2026-09-23. The plan's originally
+// specified vision model (meta-llama/llama-4-scout) is no longer listed;
+// qwen/qwen3.8-27b is the current vision-capable model with json_object
+// support. Note: this model has tight on-demand rate limits (~1000 output
+// tokens/min, ~7000 input tokens/min at time of writing) — keep images
+// resized and max_tokens modest.
+export async function groqVisionAnalysis(
+  systemPrompt: string,
+  userText: string,
+  imageBase64: string,
+  mimeType: string,
+  options: { maxTokens?: number; timeoutMs?: number } = {},
+): Promise<string> {
+  const apiKey = Deno.env.get("GROQ_API_KEY");
+  if (!apiKey) throw new GroqError("GROQ_API_KEY is not configured");
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), options.timeoutMs ?? DEFAULT_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(`${GROQ_BASE_URL}/chat/completions`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "qwen/qwen3.8-27b",
+        max_tokens: options.maxTokens ?? 700,
+        temperature: 0.3,
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: systemPrompt },
+          {
+            role: "user",
+            content: [
+              { type: "text", text: userText },
+              { type: "image_url", image_url: { url: `data:${mimeType};base64,${imageBase64}` } },
+            ],
+          },
+        ],
+      }),
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      throw new GroqError(`Groq vision request failed: ${response.status} ${body}`, response.status);
+    }
+
+    const payload = await response.json();
+    const content = payload.choices?.[0]?.message?.content;
+
+    if (typeof content !== "string" || content.trim() === "") {
+      throw new GroqError("Groq vision returned an empty response");
+    }
+
+    return content;
+  } catch (error) {
+    if (error instanceof GroqError) throw error;
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new GroqError("Groq vision request timed out");
+    }
+    throw new GroqError(`Groq vision request failed: ${String(error)}`);
+  } finally {
+    clearTimeout(timeout);
+  }
+}

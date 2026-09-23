@@ -5,11 +5,14 @@ import { ChatWindow } from "@/components/chat/chat-window";
 
 export default async function NewChatPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ prefill?: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const { prefill } = await searchParams;
 
   const supabase = await createClient();
   const {
@@ -21,6 +24,12 @@ export default async function NewChatPage({
   }
 
   return (
-    <ChatWindow key="new" chatId={null} initialMessages={[]} language={locale === "te" ? "te" : "en"} />
+    <ChatWindow
+      key="new"
+      chatId={null}
+      initialMessages={[]}
+      language={locale === "te" ? "te" : "en"}
+      initialInput={prefill}
+    />
   );
 }

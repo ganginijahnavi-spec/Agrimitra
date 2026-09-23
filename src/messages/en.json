@@ -335,5 +335,48 @@
       "unavailable": "The AI assistant is temporarily unavailable. Please try again.",
       "generic": "Something went wrong. Please try again."
     }
+  },
+  "Analyze": {
+    "title": "Analyze Crop",
+    "subtitle": "Upload a photo to get advisory guidance.",
+    "uploadLabel": "Crop photo",
+    "uploadHint": "Tap to take or choose a photo — JPEG, PNG or WebP, up to 5MB.",
+    "changePhoto": "Change photo",
+    "cropLabel": "Crop",
+    "noCropSelected": "None / not sure",
+    "noteLabel": "Symptom note",
+    "notePlaceholder": "Describe what you're seeing…",
+    "optional": "optional",
+    "submit": "Analyze photo",
+    "analyzing": "Analyzing…",
+    "analyzeAnother": "Analyze another photo",
+    "resultTitle": "Possible issue detected",
+    "notPlantTitle": "This doesn't look like a crop photo",
+    "notPlantDescription": "Please try again with a clear photo of a leaf or plant.",
+    "confidence": "Confidence",
+    "confidenceLow": "Low",
+    "confidenceMedium": "Medium",
+    "confidenceHigh": "High",
+    "symptoms": "Visible symptoms",
+    "causes": "Possible causes",
+    "nextSteps": "Suggested next steps",
+    "seeExpertWarning": "This looks serious — please see a qualified agricultural expert or your local KVK in person.",
+    "disclaimer": "This analysis is advisory and may be wrong. For serious or spreading problems, always confirm with a local agriculture officer or Krishi Vigyan Kendra (KVK) before taking action.",
+    "askChatbot": "Ask the chatbot about this",
+    "chatPrefill": "I analyzed a crop photo and got this result: \"{issue}\". Can you help me understand it better?",
+    "historyTitle": "Past analyses",
+    "noHistoryYet": "No analyses yet — your first result will appear here.",
+    "back": "Back to analyze",
+    "errors": {
+      "invalidType": "Please choose a JPEG, PNG or WebP image.",
+      "tooLarge": "That image is larger than 5MB. Please choose a smaller photo.",
+      "uploadFailed": "Couldn't upload your photo. Please try again.",
+      "unauthorized": "Your session expired. Please log in again.",
+      "rateLimited": "You've reached today's analysis limit. Please try again tomorrow.",
+      "busy": "The AI assistant is busy right now. Please try again in a moment.",
+      "unavailable": "Crop analysis is temporarily unavailable. Please try again.",
+      "notFound": "We couldn't find that photo. Please try uploading again.",
+      "generic": "Something went wrong. Please try again."
+    }
   }
 }

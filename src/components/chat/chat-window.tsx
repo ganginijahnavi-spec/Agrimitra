@@ -17,15 +17,17 @@ export function ChatWindow({
   chatId,
   initialMessages,
   language,
+  initialInput,
 }: {
   chatId: string | null;
   initialMessages: ChatMessage[];
   language: "en" | "te";
+  initialInput?: string;
 }) {
   const t = useTranslations("Chat");
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(initialInput ?? "");
   const [errorKey, setErrorKey] = useState<string | null>(null);
   const [lastFailedMessage, setLastFailedMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -91,7 +93,7 @@ export function ChatWindow({
     }
   }
 
-  const showEmptyState = messages.length === 0 && !isPending;
+  const showEmptyState = messages.length === 0 && !isPending && !input.trim();
 
   return (
     <div className="flex h-full flex-col">
